@@ -1,8 +1,10 @@
-FROM ubuntu:latest
+FROM alpine:latest
 
+# Getting the necessary stuff setup and installed.
 ENV PYTHONUNBUFFERED=1
-RUN apt-get update -y && apt-get upgrade -y
-RUN apt-get install python3 python3-pip cron git -y
+RUN apk add --no-cache python3
+RUN python3 -m ensurepip
+RUN apk add --no-cache git openssh
 
 COPY files/crontab /etc/cron.d/crontab
 RUN chmod 0644 /etc/cron.d/crontab
@@ -20,6 +22,8 @@ RUN cd /opt/ && git clone git@github.com:cstromblad/infosec_mastodon.git
 RUN git config --global user.email "github@x90.se"
 RUN git config --global user.name "Christoffer Strömblad"
 
+# Making crontab aware of the crontab...
 RUN crontab /etc/cron.d/crontab
 
-ENTRYPOINT ["cron", "-f"]
+# ... and DONE. Let's get this party started!
+ENTRYPOINT ["/usr/sbin/crond", "-f"]

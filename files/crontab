@@ -1,1 +1,1 @@
-0 6 * * * sh /opt/update_infosec_csv.sh
+0 * * * * sh /opt/update_infosec_csv.sh
