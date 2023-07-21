@@ -38,12 +38,17 @@ def extract_infosec_usernames(sheet: str = "") -> list:
         # Match against pattern @username@instance, and https://instance/@username
         # ... otherwise no match.
         
-        match = re.search("^[@\w]{1,}@[\w\.]{2,}", row[3])
-        if match:
-            if match.string[0] == '@':
-                username = match.string[1:]
-            else:
-                username = match.string
+        matches = re.findall("[@\w]{1,}@[\w\.]{2,}", row[3])
+        if matches:
+            for match in matches:
+
+                if match[0] == '@':
+                    username = match[1:]
+                else:
+                    username = match
+
+                usernames.append(username)
+                username = ""
 
         match = re.search("^https", row[3])
         if match:
