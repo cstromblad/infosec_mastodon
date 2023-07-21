@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "infosec_mastodon"
+version = "0.1.0"
+description = "Produce an importable Mastodon CSV-file of Infosec people."
+authors = ["Christoffer Strömblad <github@x90.se>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+requests = "^2.31.0"
+
+[tool.poetry.dev-dependencies]
+requests = "^2.31.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
