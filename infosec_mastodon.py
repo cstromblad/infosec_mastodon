@@ -1,4 +1,5 @@
 import csv
+import re
 
 import requests
 
@@ -32,18 +33,24 @@ def extract_infosec_usernames(sheet: str = "") -> list:
     _ = next(reader) # Skip first line of the sheet.
 
     for row in reader:
-        if len(row[3]) > 0:
-            if (row[3][0] == '@'):
-                username = row[3][1:]
+        username = ""
 
-            elif ("https" in row[3]):
-                # Some users have listed themselves with https://<instance>
-                # usernames, a simple hack to cope with that.
-                li = row[3].split('/')
-                username = f"{li[3][1:]}@{li[2]}"
+        # Match against pattern @username@instance, and https://instance/@username
+        # ... otherwise no match.
+        
+        match = re.search("^[@\w]{1,}@[\w\.]{2,}", row[3])
+        if match:
+            if match.string[0] == '@':
+                username = match.string[1:]
             else:
-                username = row[3]
+                username = match.string
 
+        match = re.search("^https", row[3])
+        if match:
+            li = row[3].split('/')
+            username = f"{li[3][1:]}@{li[2]}"
+
+        if username:
             usernames.append(username)
 
     return usernames
@@ -55,7 +62,7 @@ def infosec_generate_mastondon_import_csv(usernames:list,
     # Accept a list of Mastodon usernames, create and save an importable
     # Mastodon CSV-file.
     with open(INFOSEC_MASTODON_CSV, 'w') as fd:
-        fd.write(f"Account address,Show boosts,Notify on new posts, Languages\n")
+        fd.write(f"Account address,Show boosts,Notify on new posts,Languages\n")
         for username in usernames:
             fd.write(f"{username},{show_boosts},{notify_on_posts},{languages}\n")
 
