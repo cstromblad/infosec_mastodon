@@ -1,7 +1,7 @@
 # Introduction
 There are two primary files (curated_infosec.csv, and mastodon_infosec_import.csv) in this repository. Both contain people "identifying" as information and cybersecurity people. The masotdon_infosec_import.csv contain ALL people listed in the Lukasz spreadsheet document. The curated file has excluded people matching the following criteria:
 
-1. Posted at all?
+1. No toots at all?
 2. No toots in the last 3 months?
 3. Less than 10 toots in total?
 4. Following less than 5 accounts.
